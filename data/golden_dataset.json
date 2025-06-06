@@ -1,0 +1,169 @@
+[
+    {
+        "query": "Lin-Manuel Miranda",
+        "relevant": { 
+            "MUSICAL: In the Heights": 1,
+            "MUSICAL: tick, tick... BOOM!": 3,
+            "MUSICAL: Mary Poppins Returns": 2
+        }
+    },
+    {
+        "query": "2011",
+        "relevant": { 
+            "MUSICAL: The Muppets": 3, 
+            "MUSICAL: Muppets Most Wanted": 1, 
+            "MUSICAL: The Help": 3
+        }
+    },
+    {
+        "query": "war",
+        "relevant": {
+            "MUSICAL: Cabaret": 3,
+            "MUSICAL: West Side Story": 1,
+            "MUSICAL: The Sapphires": 3,
+            "MUSICAL: The Sound of Music": 3,
+            "MUSICAL: Hair": 3,
+            "MUSICAL: Carmen Jones": 3,
+            "MUSICAL: Tommy": 2
+        }
+    },
+    {
+        "query": "Paris, romance",
+        "relevant": {
+            "Moulin Rouge!": 3,
+            "An American in Paris": 3,
+            "French Cancan": 2
+        }
+    },
+    {
+        "query": "family, Judy Garland",
+        "relevant": {
+            "Meet Me in St. Louis": 3,
+            "The Wizard of Oz": 3
+        }
+    },
+    {
+        "query": "Emma Stone, Ryan Gosling",
+        "relevant": {
+            "La La Land": 3
+        }
+    },
+    {
+        "query": "biography",
+        "relevant": {
+            "MUSICAL: Funny Girl": 3,
+            "MUSICAL: Rocketman": 3,
+            "MUSICAL: tick, tick... BOOM!": 3,
+            "MUSICAL: The Sound of Music": 2,
+            "MUSICAL: The King and I": 2,
+            "MUSICAL: Yankee Doodle Dandy": 3
+        }
+    },
+    {
+        "query": "Austria",
+        "relevant": { 
+            "MUSICAL: The Sound of Music": 3
+        }
+    },
+    {
+        "query": "magical",
+        "relevant": {
+            "MUSICAL: The Wizard of Oz": 3,
+            "MUSICAL: Mary Poppins": 3,
+            "MUSICAL: Enchanted": 3,
+            "MUSICAL: Willy Wonka & the Chocolate Factory": 3,
+            "MUSICAL: Charlie and the Chocolate Factory": 3,
+            "MUSICAL: Mary Poppins Returns": 3,
+            "MUSICAL: The Muppet Christmas Carol": 2,
+            "MUSICAL: Into the Woods": 3
+        }
+    },
+    {
+        "query": "dark, comedy",
+        "relevant": {
+            "MUSICAL: Sing Street": 2,
+            "MUSICAL: The Rocky Horror Picture Show": 3,
+            "MUSICAL: Phantom of the Paradise": 3,
+            "MUSICAL: Into the Woods": 2
+        }
+    },
+    {
+        "query": "money, love",
+        "relevant": {
+            "MUSICAL: Funny Girl": 3,
+            "MUSICAL: Cabaret": 3,
+            "MUSICAL: Swing Time": 2,
+            "MUSICAL: Victor/Victoria": 2,
+            "MUSICAL: The Cocoanuts": 1,
+            "MUSICAL: The Music Man": 2,
+            "MUSICAL: Viva Las Vegas": 3,
+            "MUSICAL: Pennies from Heaven": 3
+        }
+
+    },
+    {
+        "query": "drama, revolution",
+        "relevant": {
+            "MUSICAL: The Sapphires": 3,
+            "MUSICAL: Fiddler on the Roof": 3,
+            "MUSICAL: Moulin Rouge!": 2,
+            "MUSICAL: Hipsters": 2
+}
+    },
+    {
+        "query": "fantasy, childhood",
+        "relevant": {
+            "MUSICAL: The Wizard of Oz": 3,
+            "MUSICAL: Mary Poppins": 3,
+            "MUSICAL: Willy Wonka & the Chocolate Factory": 3,
+            "MUSICAL: Chitty Chitty Bang Bang": 2
+        }
+    },
+    {
+        "query": "feminism",
+        "relevant": {
+            "MUSICAL: Funny Girl": 3,
+            "MUSICAL: Mary Poppins": 2,
+            "MUSICAL: Victor/Victoria": 3,
+            "MUSICAL: Annie Get Your Gun": 2
+        }
+    },
+    {
+        "query": "love triangle, 1950s",
+        "relevant": {
+            "MUSICAL: West Side Story": 3,
+            "MUSICAL: Grease": 2,
+            "MUSICAL: Carmen Jones": 2
+        }
+    },
+    {
+        "query": "Sondheim",
+        "relevant": {
+            "MUSICAL: Into the Woods": 3,
+            "MUSICAL: Sweeney Todd: The Demon Barber of Fleet Street": 3,
+            "MUSICAL: West Side Story": 1
+        }
+    },
+    {
+        "query": "show business, performance",
+        "relevant": {
+            "MUSICAL: Funny Girl": 3,
+            "MUSICAL: Singin' in the Rain": 3,
+            "MUSICAL: A Star is Born": 2
+        }
+    },
+    {
+        "query": "monster",
+        "relevant": {
+            "MUSICAL: Beauty and the Beast": 3,
+            "MUSICAL: The Muppets Take Manhattan": 2
+        }
+    },
+    {
+        "query": "marriage, New York",
+        "relevant": {
+            "MUSICAL: All that Jazz": 3,
+            "MUSICAL: Enchanted": 2
+        }
+    }
+]

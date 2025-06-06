@@ -8,19 +8,20 @@ import spacy
 import csv
 
 wikipedia.set_lang("en")
+
 nlp = spacy.load("en_core_web_sm")
+
 ia = IMDb()
 
-# -----------------------------
-# Wikipedia parsing
-# -----------------------------
 def get_wikipedia_info(title: str) -> dict:
     try:
         page = wikipedia.page(title)
         content = page.content
 
         composer_match = re.search(
-            r"[Mm]usic by ([A-Z][\w\-\’é]+(?: [A-Z][\w\-\’é]+)+)", content)
+            r"[Mm]usic by ([A-Z][\w\-\’é]+(?: [A-Z][\w\-\’é]+)+)",
+            content
+        )
         composer = composer_match.group(1) if composer_match else "Unknown"
 
         source_match = re.search(
@@ -28,12 +29,22 @@ def get_wikipedia_info(title: str) -> dict:
             content,
             re.IGNORECASE
         )
-        source_material = f"Novel by {source_match.group(1)}" if source_match else "Unknown"
+        source_material = (
+            f"Novel by {source_match.group(1)}"
+            if source_match
+            else "Unknown"
+        )
 
-        return {"composer": composer, "source_material": source_material}
+        return {
+            "composer": composer,
+            "source_material": source_material
+        }
 
     except (wikipedia.exceptions.DisambiguationError, wikipedia.exceptions.PageError):
-        return {"composer": "Unknown", "source_material": "Unknown"}
+        return {
+            "composer": "Unknown",
+            "source_material": "Unknown"
+        }
 
 
 def get_songs_from_wikipedia(title: str) -> list:
@@ -45,7 +56,6 @@ def get_songs_from_wikipedia(title: str) -> list:
         return ["Unknown"]
 
     soup = BeautifulSoup(response.text, "html.parser")
-
     section_titles = ["Musical numbers", "Soundtrack", "Track listing", "Songs"]
     songs = []
     found_section = False
@@ -69,10 +79,7 @@ def get_songs_from_wikipedia(title: str) -> list:
     return songs if songs else ["Unknown"]
 
 
-# -----------------------------
-# Time and Location extraction
-# -----------------------------
-def extract_time_period(text):
+def extract_time_period(text: str) -> str:
     if not text or not isinstance(text, str):
         return "Unknown"
 
@@ -92,7 +99,7 @@ def extract_time_period(text):
     return "Unknown"
 
 
-def extract_location(text):
+def extract_location(text: str) -> list:
     if not text or not isinstance(text, str):
         return ["Unknown"]
 
@@ -101,9 +108,6 @@ def extract_location(text):
     return list(set(locations)) if locations else ["Unknown"]
 
 
-# -----------------------------
-# IMDb parsing
-# -----------------------------
 def get_imdb_info(title: str) -> dict:
     results = ia.search_movie(title)
     if not results:
@@ -120,7 +124,7 @@ def get_imdb_info(title: str) -> dict:
         }
 
     movie = results[0]
-    ia.update(movie, info=['main', 'plot'])  
+    ia.update(movie, info=['main', 'plot'])
 
     raw_plot_list = movie.get("plot") or []
     plot_text = raw_plot_list[0] if raw_plot_list and isinstance(raw_plot_list[0], str) else ""
@@ -144,34 +148,37 @@ def get_imdb_info(title: str) -> dict:
     }
 
 
-# -----------------------------
-# process_row для process_musicals()
-# -----------------------------
-def process_row(title):
+def process_row(title: str) -> dict:
     try:
         imdb_data = get_imdb_info(title)
         wiki_data = get_wikipedia_info(title)
         songs = get_songs_from_wikipedia(title)
     except Exception as e:
         print(f"[WARN] Error processing {title}: {e}")
-        imdb_data = {}
-        wiki_data = {}
+        imdb_data = {
+            "imdb_title": None,
+            "release_date": None,
+            "directors": [],
+            "genres": [],
+            "actors": [],
+            "characters": [],
+            "plot": [],
+            "time_period": "Unknown",
+            "location": ["Unknown"]
+        }
+        wiki_data = {"composer": "Unknown", "source_material": "Unknown"}
         songs = ["Unknown"]
 
-    songs_text = "; ".join(songs) if songs and songs != ["Unknown"] else "Unknown"
     return {
         **imdb_data,
         **wiki_data,
-        "songs": songs_text
+        "songs": songs
     }
 
+def process_musicals(input_file: str, output_file: str, critic_file: str, limit: int = None):
 
-# -----------------------------
-# process_musicals (без дублей и с логами)
-# -----------------------------
-def process_musicals(input_file, output_file, critic_file, limit=5):
     results = []
-    seen_ids = set()  
+    seen_ids = set()
 
     critic_quotes = {}
     with open(critic_file, 'r', encoding='utf-8') as f:
@@ -186,11 +193,14 @@ def process_musicals(input_file, output_file, critic_file, limit=5):
     with open(input_file, 'r', encoding='utf-8') as f:
         reader = csv.DictReader(f)
         for i, row in enumerate(reader, start=1):
+            if limit and i > limit:
+                break
+
             title = row['movieTitle'].strip()
             movie_id = row['movieId'].strip()
 
             if movie_id in seen_ids:
-                print(f"[SKIP] Double {movie_id} («{title}»)")
+                print(f"[SKIP] Duplicate movieId={movie_id} («{title}»)")
                 continue
 
             print(f"[INFO] Processing ({i}) «{title}» (ID={movie_id})")
@@ -198,12 +208,12 @@ def process_musicals(input_file, output_file, critic_file, limit=5):
 
             data = process_row(title)
             if not data:
-                print(f"[WARN] process_row returns None for «{title}», skip.")
+                print(f"[WARN] process_row returned empty for «{title}», skip.")
                 continue
 
             data['id'] = len(results) + 1
             data['movieId'] = movie_id
-            data['quote'] = critic_quotes.get(movie_id, '')
+            data['quote'] = critic_quotes.get(movie_id, "")
 
             results.append(data)
             print(f"[OK] Added «{title}» ({len(results)})")
@@ -213,15 +223,27 @@ def process_musicals(input_file, output_file, critic_file, limit=5):
         all_keys.update(r.keys())
     fieldnames = ['id', 'movieId'] + sorted(k for k in all_keys if k not in ['id', 'movieId'])
 
-    with open('output/output.csv', 'w', newline='', encoding='utf-8') as csvfile:
-        fieldnames = results[0].keys()
-        writer = csv.DictWriter(csvfile, fieldnames=fieldnames, quoting=csv.QUOTE_MINIMAL)
+    with open(output_file, 'w', newline='', encoding='utf-8') as csvfile:
+        writer = csv.DictWriter(
+            csvfile,
+            fieldnames=fieldnames,
+            quoting=csv.QUOTE_ALL  
+        )
         writer.writeheader()
 
-        for idx, row in enumerate(results, start=1):
+        for row in results:
             for key, value in row.items():
                 if isinstance(value, list):
-                    row[key] = ", ".join(map(str, value))
-
+                    row[key] = repr(value)
             writer.writerow(row)
+
+    print(f"[INFO] CSV записан в {output_file}")
+
+
+if __name__ == "__main__":
+    input_csv = "input/movies.csv"        
+    critic_csv = "input/critic_quotes.csv" 
+    output_csv = "output/output.csv"
+
+    process_musicals(input_csv, output_csv, critic_csv, limit=None)
 

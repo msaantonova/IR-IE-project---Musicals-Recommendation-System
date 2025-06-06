@@ -8,15 +8,15 @@ with open(graph_path, 'rb') as f:
 
 musical_nodes = [n for n, attr in G.nodes(data=True) if attr.get('type') == 'musical']
 
-print("Пары рёбер между музыкальными узлами:")
+print("Edges between musical nodes:")
 for u, v in G.edges():
     if u.startswith("MUSICAL:") and v.startswith("MUSICAL:"):
         print(f"{u} <-> {v}")
 
-print("\nРёбра, где хотя бы одна вершина — музыкальная:")
+print("\nEdges where at least 1 is Musical:")
 for u, v in G.edges():
     if u.startswith("MUSICAL:") or v.startswith("MUSICAL:"):
         print(f"{u} <-> {v}")
 
-print("\nКоличество музыкальных узлов:", len(musical_nodes))
+print("\nNumber of musical nodes:", len(musical_nodes))
 
